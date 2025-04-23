@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>商丘师范学院第四届网络安全及信息对抗大赛（校外赛）</title>
+    <link href="/2025/04/23/%E5%95%86%E4%B8%98%E5%B8%88%E8%8C%83%E5%AD%A6%E9%99%A2%E7%AC%AC%E5%9B%9B%E5%B1%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%8F%8A%E4%BF%A1%E6%81%AF%E5%AF%B9%E6%8A%97%E5%A4%A7%E8%B5%9B%EF%BC%88%E6%A0%A1%E5%A4%96%E8%B5%9B%EF%BC%89/"/>
+    <url>/2025/04/23/%E5%95%86%E4%B8%98%E5%B8%88%E8%8C%83%E5%AD%A6%E9%99%A2%E7%AC%AC%E5%9B%9B%E5%B1%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%8F%8A%E4%BF%A1%E6%81%AF%E5%AF%B9%E6%8A%97%E5%A4%A7%E8%B5%9B%EF%BC%88%E6%A0%A1%E5%A4%96%E8%B5%9B%EF%BC%89/</url>
+    
+    <content type="html"><![CDATA[<h2 id="WEB"><a href="#WEB" class="headerlink" title="WEB"></a>WEB</h2><h3 id="RceMe"><a href="#RceMe" class="headerlink" title="RceMe"></a>RceMe</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br><span class="hljs-variable">$command</span> = <span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;com&#x27;</span>];<br><span class="hljs-keyword">if</span> (<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$command</span>) &amp;&amp; <span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$command</span>) &lt;= <span class="hljs-number">5</span>) &#123;<br>    <span class="hljs-title function_ invoke__">system</span>(<span class="hljs-variable">$command</span>);<br>&#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-keyword">print</span>(<span class="hljs-string">&quot;你小子干什么呢？&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure><p><strong>com</strong>传参，并且传入的参数需要 <strong>&lt;&#x3D;5</strong></p><blockquote><p>payload ：<code>http://challenge.qsnctf.com:32123/?com=nl /*</code></p></blockquote><hr><h3 id="ezGame"><a href="#ezGame" class="headerlink" title="ezGame"></a>ezGame</h3><p>前端小游戏<br><img src="/img/%E5%95%86%E4%B8%98%E5%B8%88%E8%8C%83%E5%AD%A6%E9%99%A2%E7%AC%AC%E5%9B%9B%E5%B1%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%8F%8A%E4%BF%A1%E6%81%AF%E5%AF%B9%E6%8A%97%E5%A4%A7%E8%B5%9B/image.png"></p><h4 id="解法一"><a href="#解法一" class="headerlink" title="解法一"></a>解法一</h4><p>找到<code>getflag()</code>函数</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-attr">getFlag</span>: <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>        <span class="hljs-keyword">var</span> req = <span class="hljs-keyword">new</span> <span class="hljs-title class_">XMLHttpRequest</span>;<br>        req.<span class="hljs-title function_">open</span>(<span class="hljs-string">&quot;GET&quot;</span>,<span class="hljs-string">&quot;flag.php?score=&quot;</span>+obj.<span class="hljs-property">score</span>,<span class="hljs-literal">true</span>);<br>        req.<span class="hljs-property">onload</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) &#123;<br>            <span class="hljs-title function_">alert</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">responseText</span>);<br>            &#125;<br>        req.<span class="hljs-title function_">send</span>();<br>      &#125;<br>    &#125;<br></code></pre></td></tr></table></figure><p>从代码中看到通过get方法打开flag.php并进行传参将会得到flag。<br><img src="/img/%E5%95%86%E4%B8%98%E5%B8%88%E8%8C%83%E5%AD%A6%E9%99%A2%E7%AC%AC%E5%9B%9B%E5%B1%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%8F%8A%E4%BF%A1%E6%81%AF%E5%AF%B9%E6%8A%97%E5%A4%A7%E8%B5%9B/2.png"></p><h4 id="解法二"><a href="#解法二" class="headerlink" title="解法二"></a>解法二</h4><p>通过控制台直接对score进行赋值，然后执行<code>getFlag()</code><br><img src="/img/%E5%95%86%E4%B8%98%E5%B8%88%E8%8C%83%E5%AD%A6%E9%99%A2%E7%AC%AC%E5%9B%9B%E5%B1%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%8F%8A%E4%BF%A1%E6%81%AF%E5%AF%B9%E6%8A%97%E5%A4%A7%E8%B5%9B/3.png"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>比赛</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>ctf</tag>
+      
+      <tag>web</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>test</title>
     <link href="/2025/04/22/test/"/>
     <url>/2025/04/22/test/</url>
@@ -29,8 +56,14 @@
     <link href="/2025/04/22/hello-world/"/>
     <url>/2025/04/22/hello-world/</url>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p><hr><blockquote><p>你好</p></blockquote><ul><li>无序列表项 一<ul><li>子无序列表 一</li><li>子无序列表 二<ul><li>子无序列表 三</li></ul></li></ul></li><li>无序列表项 二</li><li>无序列表项 三</li></ul><ol><li>有序列表项 一<ol><li>子有序列表项 一</li><li>子有序列表项 二</li></ol></li><li>有序列表项 二</li><li>有序列表项 三</li></ol>]]></content>
     
+    
+    <categories>
+      
+      <category>比赛</category>
+      
+    </categories>
     
     
     <tags>
